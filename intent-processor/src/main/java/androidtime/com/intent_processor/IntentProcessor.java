@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
@@ -26,11 +27,12 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 
+import example.annotation.androidtime.com.intent_annotation.MyString;
 import example.annotation.androidtime.com.intent_annotation.NewIntent;
 
 @AutoService(Processor.class)
 public class IntentProcessor extends AbstractProcessor {
-
+    private static final String TARGET_STATEMENT_FORMAT = "target.%1$s = %2$s";
     private static final String METHOD_PREFIX = "start";
     private static final ClassName classIntent = ClassName.get("android.content", "Intent");
     private static final ClassName classContext = ClassName.get("android.content", "Context");
@@ -38,7 +40,7 @@ public class IntentProcessor extends AbstractProcessor {
     private Filer filer;
     private Messager messager;
     private Elements elements;
-    private Map<String, String> activitiesWithPackage;
+    private Map<Element, String> activitiesWithPackage;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
@@ -56,7 +58,7 @@ public class IntentProcessor extends AbstractProcessor {
             /**
              * 1- Find all annotated element
              */
-            for (Element element : roundEnvironment.getElementsAnnotatedWith(NewIntent.class)) {
+            /*for (Element element : roundEnvironment.getElementsAnnotatedWith(NewIntent.class)) {
 
                 if (element.getKind() != ElementKind.CLASS) {
                     messager.printMessage(Diagnostic.Kind.ERROR, "Can be applied to class.");
@@ -67,12 +69,14 @@ public class IntentProcessor extends AbstractProcessor {
                 activitiesWithPackage.put(
                         typeElement.getSimpleName().toString(),
                         elements.getPackageOf(typeElement).getQualifiedName().toString());
+
+                messager.printMessage(Diagnostic.Kind.NOTE, "Type:=== " + typeElement.getSimpleName());
             }
 
 
-            /**
+            *//**
              * 2- Generate a class
-             */
+             *//*
             TypeSpec.Builder navigatorClass = TypeSpec
                     .classBuilder("Navigator")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
@@ -94,17 +98,59 @@ public class IntentProcessor extends AbstractProcessor {
             }
 
 
-            /**
+            *//**
              * 3- Write generated class to a file
-             */
+             *//*
             JavaFile.builder("com.annotationsample", navigatorClass.build()).build().writeTo(filer);
+            */
 
+            for (Element element : roundEnvironment.getElementsAnnotatedWith(MyString.class)) {
+                if (element.getKind() != ElementKind.FIELD) {
+                    messager.printMessage(Diagnostic.Kind.ERROR, "Can be applied to class.");
+                    return true;
+                }
+
+                TypeElement enclosingElement = ((TypeElement) element.getEnclosingElement());
+
+                activitiesWithPackage.put(
+                        element,
+                        elements.getPackageOf(element).getQualifiedName().toString());
+
+                messager.printMessage(Diagnostic.Kind.NOTE, "Type:" + element.getSimpleName().toString());
+
+            }
+
+            TypeSpec.Builder navigatorClass1 = TypeSpec
+                    .classBuilder("NavigatorTest")
+                    .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+
+            for (Map.Entry<Element, String> element : activitiesWithPackage.entrySet()) {
+                //String activityName = element.getKey();
+                String packageName = element.getValue();
+                //ClassName activityClass = ClassName.get(packageName, activityName);
+                //String x = "new " + classIntent.toString() +"(context, " + activityClass + ".class)";
+                TypeElement enclosingElement = ((TypeElement) element.getKey().getEnclosingElement());
+                MethodSpec intentMethod = MethodSpec
+                        .constructorBuilder()
+                        .addModifiers(Modifier.PUBLIC)
+                        .addParameter(TypeName.get(enclosingElement.asType()), "test")
+                        .addStatement("test." + "x = $S", "Hello Augmedix! " + enclosingElement.asType())
+                        //.addStatement("return new $T($L, $L)", classIntent, "context", activityClass + ".class")
+                        .build();
+                navigatorClass1.addMethod(intentMethod);
+            }
+
+            JavaFile.builder("com.annotationsample", navigatorClass1.build()).build().writeTo(filer);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         return true;
+    }
+
+    public String getVal() {
+        return "Hello wolrd";
     }
 
     @Override
