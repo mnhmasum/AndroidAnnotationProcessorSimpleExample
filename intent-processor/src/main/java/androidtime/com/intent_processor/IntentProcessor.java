@@ -136,7 +136,6 @@ public class IntentProcessor extends AbstractProcessor {
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(TypeName.get(enclosingElement.asType()), "test")
                         .addStatement("test." + "x = $S", "Hello Augmedix! " + enclosingElement.asType())
-                        //.addStatement("return new $T($L, $L)", classIntent, "context", activityClass + ".class")
                         .build();
                 navigatorClass1.addMethod(intentMethod);
             }
@@ -148,10 +147,6 @@ public class IntentProcessor extends AbstractProcessor {
         }
 
         return true;
-    }
-
-    public String getVal() {
-        return "Hello wolrd";
     }
 
     @Override
