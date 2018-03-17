@@ -41,6 +41,7 @@ public class IntentProcessor extends AbstractProcessor {
     private Messager messager;
     private Elements elements;
     private Map<Element, String> activitiesWithPackage;
+    private Map<String, String> activitiesWithPackage1;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
@@ -49,6 +50,7 @@ public class IntentProcessor extends AbstractProcessor {
         messager = processingEnvironment.getMessager();
         elements = processingEnvironment.getElementUtils();
         activitiesWithPackage = new HashMap<>();
+        activitiesWithPackage1 = new HashMap<>();
     }
 
     @Override
@@ -58,7 +60,7 @@ public class IntentProcessor extends AbstractProcessor {
             /**
              * 1- Find all annotated element
              */
-            /*for (Element element : roundEnvironment.getElementsAnnotatedWith(NewIntent.class)) {
+            for (Element element : roundEnvironment.getElementsAnnotatedWith(NewIntent.class)) {
 
                 if (element.getKind() != ElementKind.CLASS) {
                     messager.printMessage(Diagnostic.Kind.ERROR, "Can be applied to class.");
@@ -66,7 +68,7 @@ public class IntentProcessor extends AbstractProcessor {
                 }
 
                 TypeElement typeElement = (TypeElement) element;
-                activitiesWithPackage.put(
+                activitiesWithPackage1.put(
                         typeElement.getSimpleName().toString(),
                         elements.getPackageOf(typeElement).getQualifiedName().toString());
 
@@ -74,14 +76,14 @@ public class IntentProcessor extends AbstractProcessor {
             }
 
 
-            *//**
+            /**
              * 2- Generate a class
-             *//*
+             */
             TypeSpec.Builder navigatorClass = TypeSpec
                     .classBuilder("Navigator")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
-            for (Map.Entry<String, String> element : activitiesWithPackage.entrySet()) {
+            for (Map.Entry<String, String> element : activitiesWithPackage1.entrySet()) {
                 String activityName = element.getKey();
                 String packageName = element.getValue();
                 ClassName activityClass = ClassName.get(packageName, activityName);
@@ -97,12 +99,11 @@ public class IntentProcessor extends AbstractProcessor {
                 navigatorClass.addMethod(intentMethod);
             }
 
-
-            *//**
+            /**
              * 3- Write generated class to a file
-             *//*
+             */
             JavaFile.builder("com.annotationsample", navigatorClass.build()).build().writeTo(filer);
-            */
+
 
             for (Element element : roundEnvironment.getElementsAnnotatedWith(MyString.class)) {
                 if (element.getKind() != ElementKind.FIELD) {

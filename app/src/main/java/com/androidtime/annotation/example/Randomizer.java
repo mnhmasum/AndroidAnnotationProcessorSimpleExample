@@ -17,7 +17,7 @@ public final class Randomizer {
     public static void bind(Activity activity) {
         try {
 
-            Class bindingClass = Class.forName("com.annotationsample.NavigatorTest_test");
+            Class bindingClass = Class.forName("com.annotationsample.NavigatorTest");
             //noinspection unchecked
             Constructor constructor = bindingClass.getConstructor(activity.getClass());
             constructor.newInstance(activity);

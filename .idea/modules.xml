@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidAnnotationProcessorSimpleExample.iml" filepath="$PROJECT_DIR$/AndroidAnnotationProcessorSimpleExample.iml" />
       <module fileurl="file://$PROJECT_DIR$/MyHelloAnnotationExample.iml" filepath="$PROJECT_DIR$/MyHelloAnnotationExample.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/intent-annotation/intent-annotation.iml" filepath="$PROJECT_DIR$/intent-annotation/intent-annotation.iml" />

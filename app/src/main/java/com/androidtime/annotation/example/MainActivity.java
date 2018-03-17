@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.annotationsample.Navigator;
+
 import example.annotation.androidtime.com.intent_annotation.MyString;
 import example.annotation.androidtime.com.intent_annotation.NewIntent;
 
@@ -32,7 +34,7 @@ public class MainActivity extends BaseActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Navigator.startMain2Activity(MainActivity.this);
+                Navigator.startMain2Activity(MainActivity.this);
                 Snackbar.make(view, "Replace with your own action " + x, Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
