@@ -111,6 +111,7 @@ public class IntentProcessor extends AbstractProcessor {
                     return true;
                 }
 
+
                 TypeElement enclosingElement = ((TypeElement) element.getEnclosingElement());
 
                 activitiesWithPackage.put(
@@ -128,6 +129,7 @@ public class IntentProcessor extends AbstractProcessor {
             for (Map.Entry<Element, String> element : activitiesWithPackage.entrySet()) {
                 //String activityName = element.getKey();
                 String packageName = element.getValue();
+                String val = element.getKey().getAnnotation(MyString.class).getMyStringValue();
                 //ClassName activityClass = ClassName.get(packageName, activityName);
                 //String x = "new " + classIntent.toString() +"(context, " + activityClass + ".class)";
                 TypeElement enclosingElement = ((TypeElement) element.getKey().getEnclosingElement());
@@ -135,7 +137,7 @@ public class IntentProcessor extends AbstractProcessor {
                         .constructorBuilder()
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(TypeName.get(enclosingElement.asType()), "test")
-                        .addStatement("test." + "x = $S", "Hello Augmedix! " + enclosingElement.asType())
+                        .addStatement("test." + "x = $S", val + " Hello Augmedix! " + enclosingElement.asType())
                         .build();
                 navigatorClass1.addMethod(intentMethod);
             }

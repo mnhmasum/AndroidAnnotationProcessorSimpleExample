@@ -12,4 +12,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.CLASS)
 @Target(value = ElementType.FIELD)
 public @interface MyString {
+    public String getMyStringValue();
 }

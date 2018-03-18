@@ -17,7 +17,7 @@ import example.annotation.androidtime.com.intent_annotation.NewIntent;
 
 @NewIntent
 public class MainActivity extends BaseActivity {
-    @MyString
+    @MyString(getMyStringValue = "I ohon kittam")
     public String x;
 
     @Override
